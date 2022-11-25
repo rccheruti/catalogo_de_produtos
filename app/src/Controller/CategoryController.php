@@ -13,19 +13,15 @@ use App\Entity\Category;
 
 class CategoryController extends AbstractController
 {
-    #[Route('/categories', name: 'app_category', methods: ['GET'])]
+    #[Route('/categories', name: 'category_list', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository): JsonResponse
     {
-        $data = $categoryRepository->findAll();
-
-        if(!$data) throw $this->createNotFoundException('No category registered');
-
         return $this->json([
-            'data' => $data,
+            'data' => $categoryRepository->findAll()
         ]);
     }
 
-    #[Route('/categories/{id}', name: 'app_category_single', methods: ['GET'])]
+    #[Route('/categories/{id}', name: 'category_single', methods: ['GET'])]
     public function single(int $id, CategoryRepository $categoryRepository): JsonResponse
     {
         $id = $categoryRepository->find($id);
@@ -37,7 +33,7 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/categories', name: 'app_category_create', methods: ['POST'])]
+    #[Route('/categories/create', name: 'category_create', methods: ['POST'])]
     public function create(Request $request, CategoryRepository $categoryRepository): JsonResponse
     {
         $data = $request->request->all();
@@ -45,22 +41,22 @@ class CategoryController extends AbstractController
         $category = new Category();
         $category->setName($data['name']);
         $category->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('America/Sao_Paulo')));
-        $category->setUpdatedAt(new \DateTimeImmutable('now',new \DateTimeZone('America/Sao_Paulo')));
+        $category->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('America/Sao_Paulo')));
 
         $categoryRepository->save($category, true);
 
         return $this->json([
             'message' => 'Category inserted',
-            'data' => $category
+            'data' => $category,
         ],201);
     }
 
-    #[Route('/categories/{id}', name: 'app_category_update', methods: ['PUT'])]
+    #[Route('/categories/update/{id}', name: 'category_update', methods: ['PUT'])]
     public function update(int $id,Request $request, CategoryRepository $categoryRepository, ManagerRegistry $doctrine): JsonResponse
     {
-        $data = $categoryRepository->find($id);
+        $category = $categoryRepository->find($id);
 
-        if(!$data) throw $this->createNotFoundException('Category not found');
+        if(!$category) throw $this->createNotFoundException('Category not found');
 
         $data = $request->request->all();
         $category->setName($data['name']);
@@ -71,19 +67,18 @@ class CategoryController extends AbstractController
         return $this->json([
             'message' => 'Category updated',
             'data' => $category
-        ],201);
+        ]);
     }
 
-    #[Route('/categories/{id}', name: 'app_category_delete', methods: ['DELETE'])]
-    public function destroy(int $id, CategoryRepository $categoryRepository): JsonResponse
+    #[Route('/categories/delete/{id}', name: 'category_delete', methods: ['DELETE'])]
+    public function destroy(int $id, Request $request ,CategoryRepository $categoryRepository): JsonResponse
     {
         $id = $categoryRepository->find($id);
 
        $categoryRepository->remove($id,true);
 
         return $this->json([
-            'message' => 'Category deleted',
-            'data' => $id->setName(),
+            'data' => $id->getName(),
         ]);
     }
 }
