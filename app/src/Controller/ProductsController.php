@@ -38,8 +38,7 @@ class ProductsController extends AbstractController
     public function create(Request $request, ProductRepository $productRepository): JsonResponse
     {
         $data = $request->request->all();
-//        return $this->json([$data['category_id']]);
-
+        
         $product = new Product();
         $product->setCategory($data['category']);
         $product->setCode($data['code']);

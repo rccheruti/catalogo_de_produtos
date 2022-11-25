@@ -47,7 +47,7 @@ ___
 * Para obter todas as categorias use GET para "/api/categories"
 * Para obter uma categoria pelo seu id use GET para "/api/categories/<span style='color: green'>id desejado</span>"
 * Para cadastrar uma nova categoria use POST para "/api/categories/create"
-* Para atualizar uma categoria pelo seu id use GET para "/api/categories/update<span style='color: green'>id desejado</span>"
+* Para atualizar uma categoria pelo seu id use GET para "/api/categories/update/<span style='color: green'>id desejado</span>"
 * Para deletar uma categoria pelo seu id use GET para "/api/categories/delete/<span style='color: green'>id desejado</span>"
 
 #### Products:
@@ -66,7 +66,7 @@ ___
 * Para obter todos os produtos use GET para "/api/products"
 * Para obter um produto pelo seu id use GET para "/api/products/<span style='color: green'>id desejado</span>"
 * Para cadastrar um novo produto use POST para "/api/products/create"
-* Para atualizar um produto pelo seu id use GET para "/api/products/update<span style='color: green'>id desejado</span>"
+* Para atualizar um produto pelo seu id use GET para "/api/products/update/<span style='color: green'>id desejado</span>"
 * Para deletar um produto pelo seu id use GET para "/api/products/delete/<span style='color: green'>id desejado</span>"
 
 ----
