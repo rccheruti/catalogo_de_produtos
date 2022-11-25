@@ -34,6 +34,7 @@ ___
 ___
 ### Observação:
 #### Utilizando -se no navegador da url '/api' será exibido o <span style="color: gold">api-plataform</span>, onde podemos observar todos os métodos das entidades cadastradas.
+#### Segue também url de testes do postman https://documenter.getpostman.com/view/8479351/2s8YsrzEbw
 
 ---
 ## Estrutura para requisições:
