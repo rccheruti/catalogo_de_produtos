@@ -2,7 +2,6 @@
 
 ## Esta API é um CRUD de Produtos e Categorias.
 
-
 ### Após clonar o repositório seguir os passos a seguir:
 
 * #### Iniciar o docker:
@@ -17,4 +16,6 @@ ___
 * #### Rode o migration
 > php bin/console doctrine:migrations:migrate
 ___
-
+* #### Rode o seeder
+> php vendor/bin/phinx seed:run
+___
