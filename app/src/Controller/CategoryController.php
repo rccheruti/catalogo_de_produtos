@@ -51,7 +51,7 @@ class CategoryController extends AbstractController
         ],201);
     }
 
-    #[Route('/categories/update/{id}', name: 'category_update', methods: ['PUT'])]
+    #[Route('/categories/update/{id}', name: 'category_update', methods: ['PUT','PATCH'])]
     public function update(int $id,Request $request, CategoryRepository $categoryRepository, ManagerRegistry $doctrine): JsonResponse
     {
         $category = $categoryRepository->find($id);

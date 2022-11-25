@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,12 +36,15 @@ class ProductsController extends AbstractController
     }
 
     #[Route('/products/create', name: 'products_create', methods: ['POST'])]
-    public function create(Request $request, ProductRepository $productRepository): JsonResponse
+    public function create(Request $request, ProductRepository $productRepository, CategoryRepository $categoryRepository): JsonResponse
     {
         $data = $request->request->all();
-        
+
+        $category = $categoryRepository->find((int)$data['category']);
+        if (!$category) throw $this->createNotFoundException('Category does not exist');
+
         $product = new Product();
-        $product->setCategory($data['category']);
+        $product->setCategory($category);
         $product->setCode($data['code']);
         $product->setName($data['name']);
         $product->setPrice($data['price']);
@@ -59,22 +63,28 @@ class ProductsController extends AbstractController
         ], 201);
     }
 
-    #[Route('/products/update/{id}', name: 'products_update', methods: ['PUT'])]
-    public function update(int $id, Request $request, ProductRepository $productRepository, ManagerRegistry $doctrine): JsonResponse
+    #[Route('/products/update/{id}', name: 'products_update', methods: ['PUT', 'PATCH'])]
+    public function update(int $id, Request $request, ProductRepository $productRepository, ManagerRegistry $doctrine, CategoryRepository $categoryRepository): JsonResponse
     {
         $product = $productRepository->find($id);
+        $data = $request->request->all();
 
         if (!$product) throw $this->createNotFoundException('Product not found');
 
-        $data = $request->request->all();
-        $product->setCategory($data['category']);
-        $product->setCode($data['code']);
-        $product->setName($data['name']);
-        $product->setPrice($data['price']);
-        $product->setPricePromotion($data['pricePromotion']);
-        $product->setTax($data['tax']);
-        $product->setPromotion($data['promotion']);
-        $product->setActive($data['active']);
+        if (isset($data['category'])) {
+            $category = $categoryRepository->find((int)$data['category']);
+            if (!$category) throw $this->createNotFoundException('Category does not exist');
+            $product->setCategory($category);
+        }
+
+        if(isset($data['code'])) $product->setCode($data['code']);
+        if(isset($data['name'])) $product->setName($data['name']);
+        if(isset($data['price'])) $product->setPrice($data['price']);
+        if(isset($data['pricePromotion'])) $product->setPricePromotion($data['pricePromotion']);
+        if(isset($data['tax'])) $product->setTax($data['tax']);
+        if(isset($data['promotion'])) $product->setPromotion($data['promotion']);
+        if(isset($data['active'])) $product->setActive($data['active']);
+
         $product->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('America/Sao_Paulo')));
 
         $doctrine->getManager()->flush();
