@@ -67,7 +67,7 @@ class CategoryController extends AbstractController
         return $this->json([
             'message' => 'Category updated',
             'data' => $category
-        ],201);
+        ]);
     }
 
     #[Route('/categories/delete/{id}', name: 'category_delete', methods: ['DELETE'])]
